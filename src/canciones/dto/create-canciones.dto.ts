@@ -1,8 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsMimeType, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from "class-validator";
-
-import { AlbumEntity } from "../entities/album.entity";
-import { GeneroEntity } from "../entities/genero.entity";
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from "class-validator";
 
 export class CreateCancionesDto {
 
@@ -11,9 +8,14 @@ export class CreateCancionesDto {
         type: 'file',
         description: 'Imagen de la cancion',
     })
-    @IsNotEmpty()
-    @IsMimeType()
-    imagen: object;
+    imagen: Express.Multer.File;
+
+    @ApiProperty({
+        example: '',
+        type: 'file',
+        description: 'cancion',
+    })
+    cancion: Express.Multer.File;
 
     @ApiProperty({
         example: 'Cumbia de los trapos',
@@ -44,7 +46,7 @@ export class CreateCancionesDto {
     @IsString()
     @IsUUID()
     @IsNotEmpty()
-    genero: GeneroEntity;
+    genero: string;
 
     @ApiProperty({
         example: 'ef55cc42-1787-40d5-9857-91a8e15c693d',
@@ -54,6 +56,6 @@ export class CreateCancionesDto {
     })
     @IsString()
     @IsUUID()
-    @IsOptional()
-    album?: AlbumEntity;
+    @IsNotEmpty()
+    album: string;
 }

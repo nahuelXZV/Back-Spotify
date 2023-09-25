@@ -15,7 +15,7 @@ export const DataSourceConfig: DataSourceOptions = {
   entities: [__dirname + '/../**/**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   // synchronize: configService.get('APP_PROD') === 'true' ? true : false,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   ssl: configService.get('APP_PROD') === 'true' ? true : false,
   extra: {

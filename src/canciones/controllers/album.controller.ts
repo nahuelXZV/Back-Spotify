@@ -10,6 +10,7 @@ import { CreateAlbumDto, UpdateAlbumDto } from '../dto';
 import { AlbumService } from '../services/album.service';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { AlbumEntity } from '../entities/album.entity';
+import { ModifyUrlInterceptor } from '../interceptors/modify-url/modify-url.interceptor';
 
 @ApiTags('Album')
 @UseGuards(AuthGuard, RolesGuard)
@@ -30,6 +31,7 @@ export class AlbumController {
 
     @ApiQuery({ name: 'limit', type: 'number', required: false })
     @ApiQuery({ name: 'offset', type: 'number', required: false })
+    @UseInterceptors(new ModifyUrlInterceptor('albumes'))
     @Get()
     findAll(@Query() queryDto: QueryDto): Promise<AlbumEntity[]> {
         return this.albumService.findAll(queryDto);
@@ -37,15 +39,17 @@ export class AlbumController {
 
     @ApiQuery({ name: 'attribute', type: 'string', required: true })
     @ApiQuery({ name: 'value', type: 'string', required: true })
-    @Get('many/:attribute/:value')
+    @UseInterceptors(new ModifyUrlInterceptor('albumes'))
+    @Get('by/:attribute/:value')
     findManyBy(
-        @Param('attribute', ParseUUIDPipe) attribute: string,
-        @Param('value', ParseUUIDPipe) value: string
+        @Param('attribute') attribute: string,
+        @Param('value') value: string
     ): Promise<AlbumEntity[]> {
         return this.albumService.findManyBy(attribute, value);
     }
 
     @ApiParam({ name: 'id', type: 'string' })
+    @UseInterceptors(new ModifyUrlInterceptor('albumes'))
     @Get(':id')
     findOne(@Param('id', ParseUUIDPipe) id: string): Promise<AlbumEntity> {
         return this.albumService.findOne(id);

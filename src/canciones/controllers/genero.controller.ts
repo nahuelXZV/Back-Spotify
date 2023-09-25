@@ -9,6 +9,7 @@ import { RolesAccess } from 'src/auth/decorators';
 import { GeneroService } from '../services/genero.service';
 import { CreateGeneroDto, UpdateGeneroDto } from '../dto';
 import { GeneroEntity } from '../entities/genero.entity';
+import { ModifyUrlInterceptor } from '../interceptors/modify-url/modify-url.interceptor';
 
 @ApiTags('Genero')
 @UseGuards(AuthGuard, RolesGuard)
@@ -25,12 +26,14 @@ export class GeneroController {
 
     @ApiQuery({ name: 'limit', type: 'number', required: false })
     @ApiQuery({ name: 'offset', type: 'number', required: false })
+    @UseInterceptors(new ModifyUrlInterceptor('genero'))
     @Get()
     findAll(@Query() queryDto: QueryDto): Promise<GeneroEntity[]> {
         return this.generoService.findAll(queryDto);
     }
 
     @ApiParam({ name: 'id', type: 'string' })
+    @UseInterceptors(new ModifyUrlInterceptor('genero'))
     @Get(':id')
     findOne(@Param('id', ParseUUIDPipe) id: string): Promise<GeneroEntity> {
         return this.generoService.findOne(id);

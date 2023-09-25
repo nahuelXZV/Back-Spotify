@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { CORS_OPTIONS } from './constants';
+import { CORS_OPTIONS } from './config/constants';
 import * as morgan from 'morgan';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { DocumentBuilder } from '@nestjs/swagger';

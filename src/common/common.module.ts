@@ -1,4 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
+import { FileSystemService } from './utils/fileSystem.utils';
 
-@Module({})
+@Global()
+@Module({
+    imports: [],
+    controllers: [],
+    providers: [FileSystemService],
+    exports: [FileSystemService],
+})
 export class CommonModule {}

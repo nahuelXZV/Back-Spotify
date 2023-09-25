@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorException, NotFoundException, } from '@nestjs/common/exceptions';
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
 import { UsersEntity } from 'src/users/entities/users.entity';
 import { UserService } from 'src/users/services/users.service';
 import { IPayload } from '../interfaces/payload.interface';
-import { ConfigService } from '@nestjs/config';
 import { userToken } from 'src/common/utils/user.token';
 import { IUserToken } from '../interfaces/userToken.interface';
 

@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProvidersModule } from './providers/providers.module';
 import { CommonModule } from './common/common.module';
 import { SeederModule } from './seeder/seeder.module';
+import { CancionesModule } from './canciones/canciones.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SeederModule } from './seeder/seeder.module';
     CommonModule,
     ProvidersModule,
     SeederModule,
+    CancionesModule,
   ],
 })
 export class AppModule {}

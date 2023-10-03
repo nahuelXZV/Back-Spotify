@@ -9,6 +9,7 @@ import { CommonModule } from './common/common.module';
 import { SeederModule } from './seeder/seeder.module';
 import { CancionesModule } from './canciones/canciones.module';
 import { FileModule } from './file/file.module';
+import { SuscripcionModule } from './suscripcion/suscripcion.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { FileModule } from './file/file.module';
     SeederModule,
     CancionesModule,
     FileModule,
+    SuscripcionModule,
   ],
 })
 export class AppModule {}

@@ -9,7 +9,7 @@ import { UpdateExampleDto } from '../dto/update-example.dto';
 import { ExampleEntity } from '../entities/example.entity';
 import { DeleteMessage } from 'src/common/interfaces/delete-message.interface';
 import { RolesAccess } from 'src/auth/decorators';
- 
+  
 @UseGuards(AuthGuard, RolesGuard)
 @Controller('example')
 export class ExampleController {

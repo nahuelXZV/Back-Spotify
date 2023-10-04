@@ -1,0 +1,594 @@
+{
+	"info": {
+		"_postman_id": "edfabb1e-7df1-4ba1-9515-27fbe290521c",
+		"name": "SW1-Spotify",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "19549244"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"nahuel@live.com\",\r\n    \"password\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/login"
+					},
+					"response": []
+				},
+				{
+					"name": "checkToken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZDYwNzM4YS1iYTYxLTRlZTgtYjA3Ny1lM2YyN2M5ZGM0OWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTMxNjQ5MDcsImV4cCI6MTY5MzI1MTMwN30.ht5hTrsy-ARgx8KRdiqKBMZd0L_cRaXPS8Txec5Q-4M\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/checkToken"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"nahuel\",\r\n    \"apellido\": \"zalazar\",\r\n    \"email\": \"nahuel@live.com\",\r\n    \"password\": \"123456789\",\r\n    \"role\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/user"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"nahuel\",\r\n    \"apellido\": \"zalazar\",\r\n    \"email\": \"nahuel@live.com\",\r\n    \"password\": \"123\",\r\n    \"role\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/user/94f696b3-28d1-4018-bb57-cb56a41c53f0"
+					},
+					"response": []
+				},
+				{
+					"name": "users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/user"
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/user/a71c3972-6d88-4e22-bfb3-8b296c41c103"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{url}}/user/a71c3972-6d88-4e22-bfb3-8b296c41c103"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZjU1Y2M0Mi0xNzg3LTQwZDUtOTg1Ny05MWE4ZTE1YzY5M2QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTU2NjkyMDQsImV4cCI6MTY5NTc1NTYwNH0.33AqJQrT4SFx-j1V8jOn2NfHCsmhtRE32LqlRYD9ATg"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Seeder",
+			"item": [
+				{
+					"name": "seeder",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/seed"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Genero",
+			"item": [
+				{
+					"name": "create",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "bachata",
+									"contentType": "",
+									"type": "text"
+								},
+								{
+									"key": "imagen",
+									"contentType": "application/json",
+									"type": "file",
+									"src": "/C:/Users/Nahuel/Pictures/twitch-recap-2022.png"
+								}
+							]
+						},
+						"url": "{{url}}/genero"
+					},
+					"response": []
+				},
+				{
+					"name": "generos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/genero"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imagen",
+									"type": "file",
+									"src": "/C:/Users/Nahuel/Pictures/Mensajes.png",
+									"disabled": true
+								},
+								{
+									"key": "nombre",
+									"value": "rock",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{url}}/genero/ca93ecc1-1524-4058-bf51-b1c2b23b141d"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{url}}/genero/f22885d1-b2af-4409-b31a-d37a02c8372a"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Album",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imagen",
+									"type": "file",
+									"src": "/C:/Users/Nahuel/Pictures/Mensajes.png"
+								},
+								{
+									"key": "nombre",
+									"value": "Cumbia Pop",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{url}}/album"
+					},
+					"response": []
+				},
+				{
+					"name": "albumes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/album"
+					},
+					"response": []
+				},
+				{
+					"name": "album",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/album/57651ed1-f341-4396-bc30-69bb13db5203"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Canciones",
+			"item": [
+				{
+					"name": "Versiones",
+					"item": [
+						{
+							"name": "versiones",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{url}}/version/758a82bb-a9bf-4591-aa1e-e057cac966dd/all"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZjU1Y2M0Mi0xNzg3LTQwZDUtOTg1Ny05MWE4ZTE1YzY5M2QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTU2NjkyMDQsImV4cCI6MTY5NTc1NTYwNH0.33AqJQrT4SFx-j1V8jOn2NfHCsmhtRE32LqlRYD9ATg"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "cumbia 2ss",
+									"type": "text"
+								},
+								{
+									"key": "genero",
+									"value": "459fe117-2ea2-4768-b559-0c42a115007a",
+									"type": "text"
+								},
+								{
+									"key": "album",
+									"value": "57651ed1-f341-4396-bc30-69bb13db5203",
+									"type": "text"
+								},
+								{
+									"key": "imagen",
+									"type": "file",
+									"src": "/C:/Users/Nahuel/Documents/ProyectosWeb/FBF/twitch-recap-2022.png"
+								},
+								{
+									"key": "cancion",
+									"type": "file",
+									"src": "y2mate.com - Dalmiro Cuellar  Morena Esperanza.mp3"
+								}
+							]
+						},
+						"url": "{{url}}/canciones"
+					},
+					"response": []
+				},
+				{
+					"name": "canciones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/canciones"
+					},
+					"response": []
+				},
+				{
+					"name": "cancion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/canciones/b5292111-1486-47b2-820c-08ed919a9ae4"
+					},
+					"response": []
+				},
+				{
+					"name": "by",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/canciones/by/usuario/ef55cc42-1787-40d5-9857-91a8e15c693d"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{url}}/canciones/b5292111-1486-47b2-820c-08ed919a9ae4"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZjU1Y2M0Mi0xNzg3LTQwZDUtOTg1Ny05MWE4ZTE1YzY5M2QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTYzNjkzMzksImV4cCI6MTY5NjQ1NTczOX0.aaL35e73tBPJRv7tssGmNEIAMK2qOpj4fkOV64yadTA"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Suscripciones",
+			"item": [
+				{
+					"name": "suscripciones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/suscripciones"
+					},
+					"response": []
+				},
+				{
+					"name": "suscripcion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/suscripciones/625b25bd-4be0-410d-baae-74b5854608aa"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Mensual\",\r\n    \"descripcion\": \"Suscripcion mensual\",\r\n    \"precio\": 35,\r\n    \"duracion\": 30,\r\n    \"estado\": \"activo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/suscripciones"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"estado\": \"inactivo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/suscripciones/625b25bd-4be0-410d-baae-74b5854608aa"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZjU1Y2M0Mi0xNzg3LTQwZDUtOTg1Ny05MWE4ZTE1YzY5M2QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTY0NDU1MzQsImV4cCI6MTY5NjUzMTkzNH0.mDBPnbaWa3DKjQd17x1aAAg-bkn_ZhBkfc2Xu61b-1U"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Suscritos",
+			"item": [
+				{
+					"name": "suscritos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/suscrito/"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"suscripcion\": \"625b25bd-4be0-410d-baae-74b5854608aa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/suscrito"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{url}}/suscrito/"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZjU1Y2M0Mi0xNzg3LTQwZDUtOTg1Ny05MWE4ZTE1YzY5M2QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTY0NDU1MzQsImV4cCI6MTY5NjUzMTkzNH0.mDBPnbaWa3DKjQd17x1aAAg-bkn_ZhBkfc2Xu61b-1U"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZjU1Y2M0Mi0xNzg3LTQwZDUtOTg1Ny05MWE4ZTE1YzY5M2QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTU2NjkyMDQsImV4cCI6MTY5NTc1NTYwNH0.33AqJQrT4SFx-j1V8jOn2NfHCsmhtRE32LqlRYD9ATg"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

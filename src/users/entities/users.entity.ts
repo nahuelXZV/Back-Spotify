@@ -7,6 +7,7 @@ import { ROLES } from '../../config/constants';
 import { IUser } from '../interfaces/user.interface';
 import { CancionesEntity } from 'src/canciones/entities/canciones.entity';
 import { AlbumEntity } from 'src/canciones/entities/album.entity';
+import { SuscritoEntity } from 'src/suscripcion/entities/suscrito.entity';
 
 @Entity({ name: 'user' })
 export class UsersEntity extends BaseEntity implements IUser {
@@ -31,4 +32,7 @@ export class UsersEntity extends BaseEntity implements IUser {
 
   @OneToMany(() => AlbumEntity, user => user.usuario)
   albumes: AlbumEntity[];
+
+  @OneToMany(() => SuscritoEntity, user => user.usuario)
+  suscripciones: SuscritoEntity[];
 }

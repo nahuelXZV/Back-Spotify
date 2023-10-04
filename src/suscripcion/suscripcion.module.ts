@@ -4,15 +4,19 @@ import { SuscripcionService } from './services/suscripcion.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SuscripcionEntity } from './entities/suscripcion.entity';
 import { UsersModule } from 'src/users/users.module';
+import { SuscritoController } from './controllers/suscrito.controller';
+import { SuscritoService } from './services/suscrito.service';
+import { SuscritoEntity } from './entities/suscrito.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      SuscripcionEntity
+      SuscripcionEntity,
+      SuscritoEntity
     ]),
     UsersModule
   ],
-  controllers: [SuscripcionController],
-  providers: [SuscripcionService],
+  controllers: [SuscripcionController, SuscritoController],
+  providers: [SuscripcionService, SuscritoService],
 })
 export class SuscripcionModule { }

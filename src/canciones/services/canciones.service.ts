@@ -15,9 +15,11 @@ import { VersionService } from './version.service';
 import { AlbumEntity } from '../entities/album.entity';
 import { GeneroEntity } from '../entities/genero.entity';
 import { UsersEntity } from 'src/users/entities/users.entity';
+import { LyriaService } from 'src/common/utils/lyria.utils';
 
 @Injectable()
 export class CancionesService {
+
 
   private readonly logger = new Logger('CancionesService');
   relaciones = ['usuario', 'genero', 'album'];
@@ -37,7 +39,7 @@ export class CancionesService {
     cancion: Express.Multer.File,
     imagen: Express.Multer.File,
   ): Promise<CancionesEntity> {
-    const { nombre, album, genero, isPrivado } = createCancionesDto;
+    const { nombre, album, genero, isPrivado, idioma } = createCancionesDto;
     const extension = imagen.originalname.split('.').pop();
     const slug = nombre.toLowerCase().replace(/ /g, '-');
     const name_file = slug + '.' + extension;
@@ -67,7 +69,8 @@ export class CancionesService {
         file: imagen,
       });
       // versionService 
-      this.versionService.create(cancion, newCancion);
+      const nameCancion = nombre.toLowerCase().replace(/ /g, '-') + ' ' + userEntity.nombre.toLowerCase().replace(/ /g, '-');
+      this.versionService.create(cancion, newCancion, nameCancion, idioma);
       return newCancion;
     } catch (error) {
       FileSystemService.deleteFile({
@@ -159,5 +162,10 @@ export class CancionesService {
     } catch (error) {
       handlerError(error, this.logger);
     }
+  }
+
+  async test(cancion: string) {
+    const letra = await LyriaService.getCancion(cancion);
+    return letra;
   }
 }

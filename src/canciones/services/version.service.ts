@@ -4,10 +4,11 @@ import { Repository } from 'typeorm';
 
 import { DeleteMessage } from 'src/common/interfaces/delete-message.interface';
 import { handlerError } from 'src/common/utils/handlerError.utils';
-import { GeneroEntity } from '../entities/genero.entity';
 import { FileSystemService } from 'src/common/utils/fileSystem.utils';
 import { VersionEntity } from '../entities/version.entity';
 import { CancionesEntity } from '../entities/canciones.entity';
+import { Lyria, LyriaService } from 'src/common/utils/lyria.utils';
+import { Idiomas } from 'src/common/constants/idiomas.constants';
 
 export interface VersionCreateOptions {
     cancionFile: Express.Multer.File;
@@ -29,34 +30,59 @@ export class VersionService {
         private readonly cancionesRepository: Repository<CancionesEntity>,
     ) { }
 
-    public async create(cancion: Express.Multer.File, cancionesEntity: CancionesEntity): Promise<boolean> {
+    public async create(cancion: Express.Multer.File, cancionesEntity: CancionesEntity, nameCancion: string, idioma: Idiomas): Promise<boolean> {
         try {
-            const idiomas = ['en', 'pt', 'fr', 'it', 'de'];
-            const letra = '....';
+            const response: Lyria = await LyriaService.getCancion(nameCancion);
+            const letra = response.letra[0];
             this.createVersion({
                 cancionFile: cancion,
                 cancion: cancionesEntity,
-                idioma: 'es',
+                idioma,
                 isBase: true,
                 letra
             });
 
-            // idiomas.forEach(async idioma => {
-            //     const letraTraducida = '....';
-            //     const cancionTraducida = cancion;
-            //     await this.createVersion({
-            //         cancionFile: cancionTraducida,
-            //         cancion: cancionEntity,
-            //         idioma: idioma,
-            //         isBase: false,
-            //         letra: letraTraducida
-            //     });
-            // });
+            const listIdiomas = Object.values(Idiomas);
+            listIdiomas.forEach(async idioma => {
+                const letraTraducida = '....';  // aqui va la letra traducida con la IA, para luego ser reemplazada por la letra traducida
+                const cancionTraducida = cancion; // aqui va la cancion traducida con la IA, para luego ser reemplazada por la cancion traducida
+                await this.createVersion({
+                    cancionFile: cancionTraducida,
+                    cancion: cancionesEntity,
+                    idioma: idioma,
+                    isBase: false,
+                    letra: letraTraducida
+                });
+            });
             return true;
         } catch (error) {
             handlerError(error, this.logger);
         }
     }
+
+    // actualizar la version
+    public async update(id: string, cancion_final: Express.Multer.File): Promise<VersionEntity> {
+        try {
+            const version: VersionEntity = await this.versionRepository.findOneOrFail({ where: { id } });
+
+            const nameCancion = cancion_final.originalname.split('.').shift().replace(/ /g, '_').toLowerCase();
+            const extension = cancion_final.originalname.split('.').pop();
+            const name_file = nameCancion + `_${version.idioma}` + '.' + extension;
+
+            FileSystemService.deleteFile({ pathFile: 'versiones', name: version.nombre_cancion });
+            FileSystemService.saveFile({
+                pathFile: 'versiones',
+                name: name_file,
+                file: cancion_final
+            });
+            version.nombre_cancion = name_file;
+            version.estado_traduccion = 'terminado';
+            return await this.versionRepository.save(version);
+        } catch (error) {
+            handlerError(error, this.logger);
+        }
+    }
+
 
     public async findAll(cancionId: string): Promise<VersionEntity[]> {
         try {

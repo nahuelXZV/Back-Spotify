@@ -32,6 +32,13 @@ export class CancionesController {
     return this.cancionesService.create(createCancionesDto, user_id, files.cancion[0], files.imagen[0]);
   }
 
+  @Get('test/:cancion')
+  test(
+    @Param('cancion') cancion: string
+  ) {
+    return this.cancionesService.test(cancion);
+  }
+
   @ApiQuery({ name: 'limit', type: 'number', required: false })
   @ApiQuery({ name: 'offset', type: 'number', required: false })
   @UseInterceptors(new ModifyUrlInterceptor('canciones'))
@@ -78,4 +85,5 @@ export class CancionesController {
   remove(@Param('id', ParseUUIDPipe) id: string): Promise<DeleteMessage> {
     return this.cancionesService.remove(id);
   }
+
 }

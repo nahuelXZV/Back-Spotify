@@ -6,4 +6,5 @@ export interface IVersion {
     nombre_cancion: string;
     isBase: boolean;
     cancion: CancionesEntity;
+    estado_traduccion: string;
 }

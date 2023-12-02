@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from "class-validator";
+import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from "class-validator";
+import { Idiomas } from "src/common/constants/idiomas.constants";
 
 export class CreateCancionesDto {
 
@@ -58,4 +59,15 @@ export class CreateCancionesDto {
     @IsUUID()
     @IsNotEmpty()
     album: string;
+
+
+    @ApiProperty({
+        example: 'ES',
+        enum: Idiomas,
+        description: 'Idioma de la cancion',
+    })
+    @IsString()
+    @IsNotEmpty()
+    @IsEnum(Idiomas)
+    idioma: Idiomas;
 }

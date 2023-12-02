@@ -19,6 +19,9 @@ export class VersionEntity extends BaseEntity implements IVersion {
     @Column({ default: false })
     isBase: boolean;
 
+    @Column({ default: 'pendiente' })
+    estado_traduccion: string;
+
     @ManyToOne(() => CancionesEntity, canciones => canciones.versiones, { onDelete: 'CASCADE' })
     cancion: CancionesEntity;
 }

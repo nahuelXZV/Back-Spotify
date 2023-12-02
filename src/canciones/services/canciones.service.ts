@@ -15,7 +15,8 @@ import { VersionService } from './version.service';
 import { AlbumEntity } from '../entities/album.entity';
 import { GeneroEntity } from '../entities/genero.entity';
 import { UsersEntity } from 'src/users/entities/users.entity';
-import { LyriaService } from 'src/common/utils/lyria.utils';
+import { Lyria, LyriaService } from 'src/common/utils/lyria.utils';
+import { GoogleTranslationService } from 'src/common/utils/translation.utils';
 
 @Injectable()
 export class CancionesService {
@@ -165,7 +166,13 @@ export class CancionesService {
   }
 
   async test(cancion: string) {
-    const letra = await LyriaService.getCancion(cancion);
-    return letra;
+    try {
+      const lyrics: Lyria = await LyriaService.getCancion(cancion);
+      const letra = lyrics.letra[0];
+      const translation = await GoogleTranslationService.translateText(letra, 'en', 'es');
+      return translation;
+    } catch (error) {
+      handlerError(error, this.logger);
+    }
   }
 }

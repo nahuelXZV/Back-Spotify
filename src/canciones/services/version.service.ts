@@ -9,6 +9,7 @@ import { VersionEntity } from '../entities/version.entity';
 import { CancionesEntity } from '../entities/canciones.entity';
 import { Lyria, LyriaService } from 'src/common/utils/lyria.utils';
 import { Idiomas } from 'src/common/constants/idiomas.constants';
+import { GoogleTranslationService } from 'src/common/utils/translation.utils';
 
 export interface VersionCreateOptions {
     cancionFile: Express.Multer.File;
@@ -41,10 +42,9 @@ export class VersionService {
                 isBase: true,
                 letra
             });
-
             const listIdiomas = Object.values(Idiomas);
-            listIdiomas.forEach(async idioma => {
-                const letraTraducida = '....';  // aqui va la letra traducida con la IA, para luego ser reemplazada por la letra traducida
+            listIdiomas.forEach(async idiomaTranslate => {
+                const letraTraducida = await GoogleTranslationService.translateText(letra, idiomaTranslate, idioma);
                 const cancionTraducida = cancion; // aqui va la cancion traducida con la IA, para luego ser reemplazada por la cancion traducida
                 await this.createVersion({
                     cancionFile: cancionTraducida,
@@ -60,7 +60,6 @@ export class VersionService {
         }
     }
 
-    // actualizar la version
     public async update(id: string, cancion_final: Express.Multer.File): Promise<VersionEntity> {
         try {
             const version: VersionEntity = await this.versionRepository.findOneOrFail({ where: { id } });

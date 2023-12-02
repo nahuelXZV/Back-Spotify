@@ -1,5 +1,5 @@
-import { Controller, Delete, Get, Param, UseGuards, ParseUUIDPipe, UseInterceptors } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { Controller, Delete, Get, Param, UseGuards, ParseUUIDPipe, UseInterceptors, Post, UploadedFile, Put, Patch } from '@nestjs/common';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard, RolesGuard } from 'src/auth/guards';
 import { DeleteMessage } from 'src/common/interfaces/delete-message.interface';
@@ -7,6 +7,8 @@ import { RolesAccess } from 'src/auth/decorators';
 import { VersionService } from '../services/version.service';
 import { VersionEntity } from '../entities/version.entity';
 import { AddUrlInterceptor } from '../interceptors/addUrl/add-url.interceptor';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Idiomas } from 'src/common/constants/idiomas.constants';
 
 @ApiTags('Version')
 @UseGuards(AuthGuard, RolesGuard)
@@ -23,11 +25,24 @@ export class VersionController {
     }
 
     @ApiParam({ name: 'id', type: 'string' })
-    @ApiParam({ name: 'idioma', type: 'string' })
+    @ApiParam({ name: 'idioma', enum: Idiomas })
     @UseInterceptors(new AddUrlInterceptor('versiones'))
     @Get(':cancion/:idioma')
     findOne(@Param('cancion', ParseUUIDPipe) cancion: string, @Param('idioma') idioma: string): Promise<VersionEntity> {
         return this.versionService.findOne(cancion, idioma);
+    }
+
+
+    @ApiParam({ name: 'id', type: 'string' })
+    @ApiBody({
+        type: Object,
+        description: 'Cancion file',
+        required: true,
+    })
+    @UseInterceptors(FileInterceptor('cancion'))
+    @Patch(':id')
+    update(@UploadedFile() cancion: Express.Multer.File, @Param('id', ParseUUIDPipe) id?: string) {
+        return this.versionService.update(id, cancion);
     }
 
     @RolesAccess('ADMIN')

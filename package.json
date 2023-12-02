@@ -24,6 +24,7 @@
     "m:run": "npm run orm:init migration:run"
   },
   "dependencies": {
+    "@google-cloud/translate": "^8.0.2",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.0.0",

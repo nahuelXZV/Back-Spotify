@@ -36,7 +36,7 @@ export class CancionesController {
   test(
     @Param('cancion') cancion: string
   ) {
-    return this.cancionesService.test(cancion);
+    return this.cancionesService.test(cancion); 
   }
 
   @ApiQuery({ name: 'limit', type: 'number', required: false })
@@ -57,7 +57,20 @@ export class CancionesController {
     @Param('attribute') attribute: string,
     @Param('value') value: string
   ): Promise<CancionesEntity[]> {
+    console.log(attribute, value);
     return this.cancionesService.findManyBy(attribute, value);
+  }
+
+  @ApiQuery({ name: 'attribute', type: 'string', required: true })
+  @ApiQuery({ name: 'value', type: 'string', required: true })
+  @UseInterceptors(new ModifyUrlInterceptor('canciones'))
+  @Get('search/:attribute/:value')
+  search(
+    @Param('attribute') attribute: string,
+    @Param('value') value: string
+  ): Promise<CancionesEntity[]> {
+    console.log(attribute, value);
+    return this.cancionesService.search(attribute, value);
   }
 
   @ApiParam({ name: 'id', type: 'string' })

@@ -57,7 +57,7 @@ export class AuthService {
     const accessToken = this.singJWT({
       payload,
       secret: this.configService.get('JWT_AUTH'),
-      expiresIn: '1h',
+      expiresIn: '24h',
     });
     return {
       accessToken,

@@ -17,6 +17,7 @@ export interface VersionCreateOptions {
     idioma: string;
     isBase?: boolean;
     letra: string;
+    estado_traduccion: string;
 }
 
 @Injectable()
@@ -34,26 +35,36 @@ export class VersionService {
     public async create(cancion: Express.Multer.File, cancionesEntity: CancionesEntity, nameCancion: string, idioma: Idiomas): Promise<boolean> {
         try {
             const response: Lyria = await LyriaService.getCancion(nameCancion);
-            const letra = response.letra[0];
+            const letra = response.letra[0] || 'Sin letra';
             this.createVersion({
                 cancionFile: cancion,
                 cancion: cancionesEntity,
                 idioma,
                 isBase: true,
-                letra
+                letra,
+                estado_traduccion: 'terminado'
             });
             const listIdiomas = Object.values(Idiomas);
-            listIdiomas.forEach(async idiomaTranslate => {
-                const letraTraducida = await GoogleTranslationService.translateText(letra, idiomaTranslate, idioma);
+            const index = listIdiomas.indexOf(idioma);
+            listIdiomas.splice(index, 1);
+            const promises = listIdiomas.map(async idiomaTranslate => {
+                let letraTraducida = '';
+                try {
+                    letraTraducida = await GoogleTranslationService.translateText(letra, idiomaTranslate, idioma);
+                } catch (error) {
+                    letraTraducida = 'Sin traduccion'
+                }
                 const cancionTraducida = cancion; // aqui va la cancion traducida con la IA, para luego ser reemplazada por la cancion traducida
                 await this.createVersion({
                     cancionFile: cancionTraducida,
                     cancion: cancionesEntity,
-                    idioma: idioma,
+                    idioma: idiomaTranslate,
                     isBase: false,
-                    letra: letraTraducida
+                    letra: letraTraducida,
+                    estado_traduccion: 'pendiente'
                 });
             });
+            await Promise.all(promises);
             return true;
         } catch (error) {
             handlerError(error, this.logger);
@@ -122,12 +133,10 @@ export class VersionService {
 
 
     private async createVersion(options: VersionCreateOptions): Promise<boolean> {
-        const { cancionFile, cancion, idioma, isBase, letra } = options;
-        const nameCancion = cancionFile.originalname.split('.').shift().replace(/ /g, '_').toLowerCase();
-        const extension = cancionFile.originalname.split('.').pop();
-        const name_file = nameCancion + `_${idioma}` + '.' + extension;
+        const { cancionFile, cancion, idioma, isBase, letra, estado_traduccion } = options;
+        const name_file = cancion.nombre.toLowerCase() + `_${idioma}` + '.' + 'mp3';
         try {
-            const version = this.versionRepository.create({ letra, idioma, isBase, cancion, nombre_cancion: name_file });
+            const version = this.versionRepository.create({ letra, idioma, isBase, cancion, nombre_cancion: name_file, estado_traduccion });
             await this.versionRepository.save(version);
 
             FileSystemService.saveFile({

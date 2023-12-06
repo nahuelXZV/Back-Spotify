@@ -26,14 +26,14 @@ export class GeneroController {
 
     @ApiQuery({ name: 'limit', type: 'number', required: false })
     @ApiQuery({ name: 'offset', type: 'number', required: false })
-    @UseInterceptors(new ModifyUrlInterceptor('genero'))
+    @UseInterceptors(new ModifyUrlInterceptor('generos'))
     @Get()
     findAll(@Query() queryDto: QueryDto): Promise<GeneroEntity[]> {
         return this.generoService.findAll(queryDto);
     }
 
     @ApiParam({ name: 'id', type: 'string' })
-    @UseInterceptors(new ModifyUrlInterceptor('genero'))
+    @UseInterceptors(new ModifyUrlInterceptor('generos'))
     @Get(':id')
     findOne(@Param('id', ParseUUIDPipe) id: string): Promise<GeneroEntity> {
         return this.generoService.findOne(id);

@@ -20,8 +20,7 @@ import { GoogleTranslationService } from 'src/common/utils/translation.utils';
 
 @Injectable()
 export class CancionesService {
-
-
+  listDuration = ["1:00", "1:30", "2:00", "2:30", "3:00", "3:30", "4:00"];
   private readonly logger = new Logger('CancionesService');
   relaciones = ['usuario', 'genero', 'album'];
 
@@ -41,12 +40,11 @@ export class CancionesService {
     imagen: Express.Multer.File,
   ): Promise<CancionesEntity> {
     const { nombre, album, genero, isPrivado, idioma } = createCancionesDto;
-    const extension = imagen.originalname.split('.').pop();
     const slug = nombre.toLowerCase().replace(/ /g, '-');
-    const name_file = slug + '.' + extension;
+    const name_file = slug + '.' + 'jpg';
     const fecha_lanzamiento = new Date();
-    const duracion = '00:00';
-    const reproducciones = 0;
+    const duracion = this.listDuration[Math.floor(Math.random() * this.listDuration.length)];
+    const reproducciones = Math.floor(Math.random() * 1000);
     try {
       const albumEntity: AlbumEntity = await this.albumService.findOne(album);
       const generoEntity: GeneroEntity = await this.generoService.findOne(genero);
@@ -69,8 +67,7 @@ export class CancionesService {
         name: name_file,
         file: imagen,
       });
-      // versionService 
-      const nameCancion = nombre.toLowerCase().replace(/ /g, '-') + ' ' + userEntity.nombre.toLowerCase().replace(/ /g, '-');
+      const nameCancion = nombre.toLowerCase().replace(/ /g, '-') + ' ' + userEntity.nombre.toLowerCase().replace(/ /g, '-') + ' ' + userEntity.apellido.toLowerCase().replace(/ /g, '-');
       this.versionService.create(cancion, newCancion, nameCancion, idioma);
       return newCancion;
     } catch (error) {
@@ -88,6 +85,20 @@ export class CancionesService {
       if (limit && offset) return await this.cancionesRepository.find({ skip: offset, take: limit, relations: this.relaciones });
       if (limit) return await this.cancionesRepository.find({ take: limit, relations: this.relaciones });
       return await this.cancionesRepository.find({ relations: this.relaciones });
+    } catch (error) {
+      handlerError(error, this.logger);
+    }
+  }
+
+  public async search(attribute: any, value: any): Promise<CancionesEntity[]> {
+    try {
+      console.log(attribute, value);
+      return await this.cancionesRepository.createQueryBuilder('canciones')
+        .leftJoinAndSelect('canciones.usuario', 'usuario')
+        .leftJoinAndSelect('canciones.album', 'album')
+        .leftJoinAndSelect('canciones.genero', 'genero')
+        .where(`canciones.${attribute} ilike :value`, { value: `%${value}%` })
+        .getMany();
     } catch (error) {
       handlerError(error, this.logger);
     }

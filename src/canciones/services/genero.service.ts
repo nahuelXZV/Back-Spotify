@@ -21,7 +21,8 @@ export class GeneroService {
 
     public async create(createGeneroDto: CreateGeneroDto, imagen: Express.Multer.File): Promise<GeneroEntity> {
         const { nombre } = createGeneroDto;
-        const extension = imagen.originalname.split('.').pop();
+        console.log(imagen);
+        const extension = imagen.mimetype === 'image/png' ? 'png' : 'jpg';
         const slug = nombre.toLowerCase().replace(/ /g, '-');
         const name_file = slug + '.' + extension;
         try {

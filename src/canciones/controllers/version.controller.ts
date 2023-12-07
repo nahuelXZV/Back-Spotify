@@ -24,7 +24,7 @@ export class VersionController {
         return this.versionService.findAll(cancion);
     }
 
-    @ApiParam({ name: 'id', type: 'string' })
+    @ApiParam({ name: 'cancion', type: 'string' })
     @ApiParam({ name: 'idioma', enum: Idiomas })
     @UseInterceptors(new AddUrlInterceptor('versiones'))
     @Get(':cancion/:idioma')
@@ -34,15 +34,16 @@ export class VersionController {
 
 
     @ApiParam({ name: 'id', type: 'string' })
+    @ApiParam({ name: 'estado', type: 'string' })
     @ApiBody({
         type: Object,
         description: 'Cancion file',
         required: true,
     })
     @UseInterceptors(FileInterceptor('cancion'))
-    @Patch(':id')
-    update(@UploadedFile() cancion: Express.Multer.File, @Param('id', ParseUUIDPipe) id?: string) {
-        return this.versionService.update(id, cancion);
+    @Patch(':id/:estado')
+    update(@UploadedFile() cancion: Express.Multer.File, @Param('id', ParseUUIDPipe) id?: string, @Param('estado') estado?: string) {
+        return this.versionService.update(id, cancion, estado);
     }
 
     @RolesAccess('ADMIN')

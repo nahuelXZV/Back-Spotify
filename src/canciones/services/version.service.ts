@@ -52,7 +52,7 @@ export class VersionService {
                 try {
                     letraTraducida = await GoogleTranslationService.translateText(letra, idiomaTranslate, idioma);
                 } catch (error) {
-                    letraTraducida = 'Sin traduccion'
+                    letraTraducida = 'Sin traduccion';
                 }
                 const cancionTraducida = cancion; // aqui va la cancion traducida con la IA, para luego ser reemplazada por la cancion traducida
                 await this.createVersion({
@@ -71,13 +71,13 @@ export class VersionService {
         }
     }
 
-    public async update(id: string, cancion_final: Express.Multer.File): Promise<VersionEntity> {
+    public async update(id: string, cancion_final: Express.Multer.File, estado: string): Promise<VersionEntity> {
         try {
-            const version: VersionEntity = await this.versionRepository.findOneOrFail({ where: { id } });
+            const version: VersionEntity = await this.versionRepository.findOneOrFail({ where: { id }, relations: ['cancion'] });
+            const cancion: CancionesEntity = await this.cancionesRepository.findOneOrFail({ where: { id: version.cancion.id } });
 
-            const nameCancion = cancion_final.originalname.split('.').shift().replace(/ /g, '_').toLowerCase();
-            const extension = cancion_final.originalname.split('.').pop();
-            const name_file = nameCancion + `_${version.idioma}` + '.' + extension;
+            const nameCancion = cancion.nombre.toLowerCase();
+            const name_file = nameCancion + `_${version.idioma}` + '.mp3';
 
             FileSystemService.deleteFile({ pathFile: 'versiones', name: version.nombre_cancion });
             FileSystemService.saveFile({
@@ -86,7 +86,7 @@ export class VersionService {
                 file: cancion_final
             });
             version.nombre_cancion = name_file;
-            version.estado_traduccion = 'terminado';
+            version.estado_traduccion = estado;
             return await this.versionRepository.save(version);
         } catch (error) {
             handlerError(error, this.logger);
@@ -109,6 +109,7 @@ export class VersionService {
     public async findOne(cancionID: string, idioma: string): Promise<VersionEntity> {
         try {
             const cancion = await this.cancionesRepository.findOne({ where: { id: cancionID } });
+            console.log(cancion);
             return await this.versionRepository.createQueryBuilder('version')
                 .leftJoinAndSelect('version.cancion', 'cancion')
                 .where('cancion.id = :id', { id: cancion.id })

@@ -76,7 +76,7 @@ export class VersionService {
             const version: VersionEntity = await this.versionRepository.findOneOrFail({ where: { id }, relations: ['cancion'] });
             const cancion: CancionesEntity = await this.cancionesRepository.findOneOrFail({ where: { id: version.cancion.id } });
 
-            const nameCancion = cancion.nombre.toLowerCase();
+            const nameCancion = cancion.nombre.toLowerCase().replace(/ /g, '_');
             const name_file = nameCancion + `_${version.idioma}` + '.mp3';
 
             FileSystemService.deleteFile({ pathFile: 'versiones', name: version.nombre_cancion });
@@ -135,7 +135,7 @@ export class VersionService {
 
     private async createVersion(options: VersionCreateOptions): Promise<boolean> {
         const { cancionFile, cancion, idioma, isBase, letra, estado_traduccion } = options;
-        const name_file = cancion.nombre.toLowerCase() + `_${idioma}` + '.' + 'mp3';
+        const name_file = cancion.nombre.toLowerCase().replace(/ /g, '_') + `_${idioma}` + '.' + 'mp3';
         try {
             const version = this.versionRepository.create({ letra, idioma, isBase, cancion, nombre_cancion: name_file, estado_traduccion });
             await this.versionRepository.save(version);
